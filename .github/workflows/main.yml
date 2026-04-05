@@ -1,0 +1,14 @@
+name: Maquina-Remota-MyFlash
+on: workflow_dispatch # Isso cria o botão de ligar
+
+jobs:
+  rodar-sistema:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do Codigo
+        uses: actions/checkout@v4
+
+      - name: Ativando Acesso via Terminal
+        uses: mxschmitt/action-tmate@v3
+        with:
+          limit-access-to-actor: false
