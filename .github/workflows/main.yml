@@ -1,14 +1,20 @@
-name: Maquina-Remota-MyFlash
-on: workflow_dispatch # Isso cria o botão de ligar
+name: Maquina-MyFlash-Zima
+on: workflow_dispatch
 
 jobs:
   rodar-sistema:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout do Codigo
-        uses: actions/checkout@v4
-
-      - name: Ativando Acesso via Terminal
-        uses: mxschmitt/action-tmate@v3
-        with:
-          limit-access-to-actor: false
+      - name: Instalar Terminal Seguro
+        run: |
+          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
+          chmod +x cloudflared
+          # Isso vai criar um terminal acessível via navegador sem o erro 503
+          ./cloudflared tunnel --url http://localhost:8080 &
+          
+          # Comando para instalar o CasaOS (Base do ZimaOS)
+          wget -qO- https://get.casaos.io | sudo bash
+          
+          # Mantém a máquina viva e abre o terminal
+          pip install gotty
+          ~/.local/bin/gotty -w --port 8080 bash
